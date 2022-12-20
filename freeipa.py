@@ -76,7 +76,7 @@ class App:
             'Content-Type': 'application/json'
         }
         response = self.session.post(
-            url, data=payload, headers=headers, verify=False)
+            url, json=payload, headers=headers, verify=False)
 
         if response.status_code != 200:
             print("ERROR! Can't exec query")
