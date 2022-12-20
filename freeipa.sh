@@ -17,7 +17,7 @@ usage() {
     exit 1; 
 }
 
-while getopts H:l:p:g:roh flag
+while getopts H:l:p:g:u:croh flag
 do
     case "${flag}" in
         H) host=${OPTARG};;
