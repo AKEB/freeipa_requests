@@ -55,7 +55,8 @@ class App:
             'user': self.settings['login'],
             'password': self.settings['password']
         }
-        response = self.session.post(url, data=post, headers=headers)
+        response = self.session.post(
+            url, data=post, headers=headers, verify=False)
         print(response)
         print(self.session.cookies.get_dict())
 
