@@ -83,7 +83,15 @@ class App:
             quit()
 
         response = json.loads(response.text)
-        return response
+        if not response:
+            print("ERROR! Can't exec query")
+            quit()
+
+        if response['error']:
+            print("ERROR! " + response['error'])
+            quit()
+
+        return response['result']
 
     def _get_user_info(self) -> None:
         print("Get user (" + self.settings['username'] + ") info")
