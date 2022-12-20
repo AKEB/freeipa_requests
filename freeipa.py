@@ -1,6 +1,7 @@
 import requests
 import os
 import sys
+import json
 
 
 class App:
@@ -67,8 +68,40 @@ class App:
             print("ERROR! Can't login to freeipa")
             quit()
 
+    def __request_freeipa_api(self, payload) -> object:
+        url = self.settings['host'] + '/ipa/session/json'
+        headers = {
+            'Accept': 'application/json',
+            'Referer': self.settings['host'] + '/ipa',
+            'Content-Type': 'application/json'
+        }
+        response = self.session.post(
+            url, data=payload, headers=headers, verify=False)
+
+        if response.status_code != 200:
+            print("ERROR! Can't exec query")
+            quit()
+
+        response = json.loads(response.text)
+        return response
+
     def _get_user_info(self) -> None:
-        print("Get user " + self.settings['username'] + " info")
+        print("Get user (" + self.settings['username'] + ") info")
+        payload = {
+            "method": "user_show",
+            "params": [
+                [
+                ],
+                {
+                    "uid": self.settings['username'],
+                    "all": True,
+                    "version": "2.246"
+                }
+            ],
+            "id": 0
+        }
+        user = self.__request_freeipa_api(payload)
+        print(user)
 
     def _add_user_to_group(self) -> None:
         print("Add user " + self.settings['username'] +
