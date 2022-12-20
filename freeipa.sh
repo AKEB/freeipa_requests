@@ -9,9 +9,11 @@ usage() {
     -H <host>     : freeipa host with https://
     -l <login>    : freeipa admin login
     -p <password> : freeipa admin password
+    -u <username> : freeipa username
+    -c            : check login
     -g <group>    : add to group
     -r            : reset password 
-    -o            : reset otp"; 
+    -o            : reset otp";
     exit 1; 
 }
 
@@ -22,6 +24,8 @@ do
         l) login=${OPTARG};;
         p) password=${OPTARG};;
         g) group=${OPTARG};;
+        u) username=${OPTARG};;
+        c) check=1;;
         r) reset=1;;
         o) otp=1;;
         h) usage;;
@@ -29,4 +33,4 @@ do
     esac
 done
 
-python3 freeipa.py host=$host login=$login password=$password group=$group reset=$reset otp=$otp
+python3 freeipa.py host=$host login=$login password=$password username=$username group=$group reset=$reset otp=$otp check=$check

@@ -10,7 +10,9 @@ class App:
         self.settings['host'] = ""
         self.settings['login'] = ""
         self.settings['password'] = ""
+        self.settings['username'] = ""
         self.settings['group'] = ""
+        self.settings['check'] = False
         self.settings['reset'] = False
         self.settings['otp'] = False
         self.session = requests.Session()
@@ -40,9 +42,12 @@ class App:
         if not self.settings['password']:
             print("You need enter admin password for freeipa")
             quit()
-        if not self.settings['group'] and not self.settings['reset'] and not self.settings['otp']:
-            print("You need choose actions for freeipa")
+        if not self.settings['username']:
+            print("You need enter username")
             quit()
+        # if not self.settings['group'] and not self.settings['reset'] and not self.settings['otp'] and not self.settings['check']:
+        #     print("You need choose actions for freeipa")
+        #     quit()
 
     def _login(self) -> None:
         url = self.settings['host'] + '/ipa/session/login_password'
@@ -57,8 +62,43 @@ class App:
         }
         response = self.session.post(
             url, data=post, headers=headers, verify=False)
-        print(response)
-        print(self.session.cookies.get_dict())
+
+        if response.status_code != 200:
+            print("ERROR! Can't login to freeipa")
+            quit()
+
+    def _get_user_info(self) -> None:
+        print("Get user " + self.settings['username'] + " info")
+
+    def _add_user_to_group(self) -> None:
+        print("Add user " + self.settings['username'] +
+              " to group " + self.settings['group'])
+
+    def _generate_onetime_link(self) -> str:
+        pass
+
+    def _generate_new_password(self) -> str:
+        pass
+
+    def _reset_user_password(self) -> None:
+        print("Reset user " + self.settings['username'] + " password")
+
+    def _reset_user_otp(self) -> None:
+        print("Reset user " + self.settings['username'] + " otp")
+
+    def _do_command(self) -> None:
+        if self.settings['check']:
+            return self._get_user_info()
+
+        if self.settings['group'] or self.settings['reset'] or self.settings['otp']:
+            if self.settings['group']:
+                self._add_user_to_group()
+            if self.settings['reset']:
+                self._reset_user_password()
+            if self.settings['otp']:
+                self._reset_user_otp()
+        else:
+            return self._get_user_info()
 
     def main(self):
         self._get_env()
@@ -66,7 +106,7 @@ class App:
         self._check_params()
         print(self.settings)
         self._login()
-        pass
+        self._do_command()
 
 
 if __name__ == "__main__":
