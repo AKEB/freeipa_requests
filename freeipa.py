@@ -44,7 +44,7 @@ class App:
     def collect_result(self, key: str, result: object, error: str = None, exit: bool = False):
         self.result[key] = result
         if error:
-            if not self.result[key] or type(self.result[key]) != object:
+            if not self.result[key]:
                 self.result[key] = {}
             self.result[key]['error'] = error
         if exit:
