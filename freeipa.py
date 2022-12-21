@@ -278,7 +278,7 @@ class Freeipa:
             self.collect_result('user', self.user)
             return
 
-    def main(self) -> object:
+    def run_actions(self) -> object:
 
         if not self.check_params():
             return self.result
@@ -303,5 +303,6 @@ if __name__ == "__main__":
     app = Freeipa()
     app.get_env()
     app.get_params()
-    app.main()
-    app.show_result()
+    results = app.run_actions()
+    print(json.dumps(results))
+    # app.show_result()
