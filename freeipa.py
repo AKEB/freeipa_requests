@@ -226,10 +226,8 @@ class App:
             self.collect_result(
                 'password', result, "Failed to reset user password")
         else:
-            self.collect_result('password', result)
-
-        one_time_link = self._generate_onetime_link(text)
-        self.collect_result('password_link', one_time_link)
+            one_time_link = self._generate_onetime_link(text)
+            self.collect_result('password', one_time_link)
 
     def reset_user_otp(self) -> None:
         secret = self.generate_new_otp()
@@ -241,6 +239,7 @@ class App:
 
         text = qrcode_uri
         # TODO: Send New OTP to Freeipa
+
         one_time_link = self._generate_onetime_link(text)
         self.collect_result('otp', one_time_link)
 
