@@ -9,7 +9,6 @@ usage() {
     -H <host>     : freeipa host with https://
     -l <login>    : freeipa admin login
     -p <password> : freeipa admin password
-    -u <username> : freeipa username
     -c            : check login
     -g <group>    : add to group
     -r            : reset password 
@@ -17,14 +16,13 @@ usage() {
     exit 1; 
 }
 
-while getopts H:l:p:g:u:croh flag
+while getopts H:l:p:g:croh flag
 do
     case "${flag}" in
         H) host=${OPTARG};;
         l) login=${OPTARG};;
         p) password=${OPTARG};;
         g) group=${OPTARG};;
-        u) username=${OPTARG};;
         c) check=1;;
         r) reset=1;;
         o) otp=1;;
@@ -33,4 +31,4 @@ do
     esac
 done
 
-python3 users_reset.py host=$host login=$login password=$password username=$username group=$group reset=$reset otp=$otp check=$check
+python3 users_reset.py host=$host login=$login password=$password group=$group reset=$reset otp=$otp check=$check

@@ -9,7 +9,6 @@ settings = {}
 settings['host'] = os.environ.get('FREEIPA_HOST') or ""
 settings['login'] = os.environ.get('FREEIPA_LOGIN') or ""
 settings['password'] = os.environ.get('FREEIPA_PASSWORD') or ""
-settings['username'] = ""
 settings['group'] = ""
 settings['check'] = False
 settings['reset'] = False
