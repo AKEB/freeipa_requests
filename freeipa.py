@@ -268,6 +268,10 @@ class App:
         self.user = self.get_user_info()
         if not self.user:
             self.collect_result('user', self.user, "User not found!", True)
+
+        self.collect_result(
+            'user_name', self.settings['username'])
+
         self.do_command()
         self.show_result()
 
