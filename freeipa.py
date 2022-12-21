@@ -19,6 +19,7 @@ class App:
         self.settings['otp'] = False
 
         self.user = None
+        self.result = {}
 
         requests.packages.urllib3.disable_warnings(
             category=InsecureRequestWarning)
@@ -40,19 +41,32 @@ class App:
                 if len(t) == 2 and t[0] in self.settings and t[1]:
                     self.settings[t[0]] = t[1]
 
+    def collect_result(self, key: str, result: object, error: str = None, exit: bool = False):
+        self.result[key] = result
+        if error:
+            if not self.result[key] or type(self.result[key]) != 'object':
+                self.result[key] = {}
+            self.result[key]['error'] = error
+        if exit:
+            self.show_result()
+            quit()
+
+    def show_result(self):
+        print(json.dumps(self.result))
+
     def check_params(self) -> None:
         if not self.settings['host']:
-            print("You need enter host for freeipa")
-            quit()
+            self.collect_result(
+                'result', None, "You need enter host for freeipa", True)
         if not self.settings['login']:
-            print("You need enter admin login for freeipa")
-            quit()
+            self.collect_result(
+                'result', None, "You need enter admin login for freeipa", True)
         if not self.settings['password']:
-            print("You need enter admin password for freeipa")
-            quit()
+            self.collect_result(
+                'result', None, "You need enter admin password for freeipa", True)
         if not self.settings['username']:
-            print("You need enter username")
-            quit()
+            self.collect_result(
+                'result', None, "You need enter username", True)
 
     def login(self) -> None:
         url = self.settings['host'] + '/ipa/session/login_password'
@@ -69,8 +83,8 @@ class App:
             url, data=post, headers=headers, verify=False)
 
         if response.status_code != 200:
-            print("ERROR! Can't login to freeipa")
-            quit()
+            self.collect_result(
+                'result', None, "Can't login to freeipa", True)
 
     def __request_freeipa_api(self, payload) -> object:
         url = self.settings['host'] + '/ipa/session/json'
@@ -83,22 +97,22 @@ class App:
             url, json=payload, headers=headers, verify=False)
 
         if response.status_code != 200:
-            print("ERROR! Can't exec query")
-            quit()
+            self.collect_result(
+                'result', None, "Can't exec query", True)
 
         response = json.loads(response.text)
         if not response:
-            print("ERROR! Can't exec query")
-            quit()
+            self.collect_result(
+                'result', None, "Can't exec query", True)
 
         if response['error']:
-            print("ERROR! " + response['error'])
-            quit()
+            self.collect_result(
+                'result', None, response['error'], True)
 
         return response['result']
 
     def get_user_info(self) -> None:
-        print("Get user (" + self.settings['username'] + ") info")
+        # print("Get user (" + self.settings['username'] + ") info")
         payload = {
             "method": "user_show",
             "params": [
@@ -118,8 +132,7 @@ class App:
         return None
 
     def _add_user_to_group(self) -> None:
-        print("Add user " + self.settings['username'] +
-              " to group " + self.settings['group'])
+        # print("Add user " + self.settings['username'] + " to group " + self.settings['group'])
         payload = {
             "method": "group_add_member",
             "params": [
@@ -138,9 +151,10 @@ class App:
             ]
         }
         result = self.__request_freeipa_api(payload)
-        print(result)
         if not result or result['failed']:
-            quit()
+            self.collect_result(
+                'group', result, "Failed add user to group", True)
+        self.collect_result('group', result)
 
     def _generate_onetime_link(self) -> str:
         pass
@@ -156,7 +170,7 @@ class App:
 
     def do_command(self) -> None:
         if self.settings['check']:
-            print(self.user)
+            self.collect_result('user', self.user)
             return
 
         if self.settings['group'] or self.settings['reset'] or self.settings['otp']:
@@ -167,22 +181,20 @@ class App:
             if self.settings['otp']:
                 self._reset_user_otp()
         else:
-            print(self.user)
+            self.collect_result('user', self.user)
             return
 
     def main(self):
         self.get_env()
         self.get_params()
         self.check_params()
-        print(self.settings)
         self.login()
 
         self.user = self.get_user_info()
         if not self.user:
-            print("ERROR! User not found!")
-            quit()
+            self.collect_result('user', self.user, "User not found!", True)
         self.do_command()
-
+        self.show_result()
 
 if __name__ == "__main__":
     app = App()
