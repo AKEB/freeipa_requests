@@ -169,9 +169,9 @@ class Freeipa:
         result = self.__request_freeipa_api(payload)
         if not result or ('failed' in result and 'completed' in result and int(result['completed']) < 1):
             self.collect_result(
-                'group', result, "Failed add user to group")
+                'group', None, "Failed add user to group")
         else:
-            self.collect_result('group', result)
+            self.collect_result('group', "ok")
 
     def _generate_onetime_link(self, text) -> str:
         url = 'https://enigma.dev-my.games/saveSecret'
