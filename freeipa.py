@@ -7,18 +7,27 @@ import random
 import base64
 
 
-class App:
+class Freeipa:
 
-    def __init__(self) -> None:
+    def __init__(self,
+                 host: str = "",
+                 login: str = "",
+                 password: str = "",
+                 username: str = "",
+                 group: str = "",
+                 check: bool = False,
+                 reset: bool = False,
+                 otp: bool = False
+                 ) -> None:
         self.settings = {}
-        self.settings['host'] = ""
-        self.settings['login'] = ""
-        self.settings['password'] = ""
-        self.settings['username'] = ""
-        self.settings['group'] = ""
-        self.settings['check'] = False
-        self.settings['reset'] = False
-        self.settings['otp'] = False
+        self.settings['host'] = host
+        self.settings['login'] = login
+        self.settings['password'] = password
+        self.settings['username'] = username
+        self.settings['group'] = group
+        self.settings['check'] = check
+        self.settings['reset'] = reset
+        self.settings['otp'] = otp
 
         self.user = None
         self.result = {}
@@ -43,34 +52,36 @@ class App:
                 if len(t) == 2 and t[0] in self.settings and t[1]:
                     self.settings[t[0]] = t[1]
 
-    def collect_result(self, key: str, result: object, error: str = None, exit: bool = False):
+    def collect_result(self, key: str, result: object, error: str = None):
         self.result[key] = result
         if error:
             if not self.result[key]:
                 self.result[key] = {}
             self.result[key]['error'] = error
-        if exit:
-            self.show_result()
-            quit()
 
     def show_result(self):
         print(json.dumps(self.result))
 
-    def check_params(self) -> None:
+    def check_params(self) -> bool:
         if not self.settings['host']:
             self.collect_result(
-                'result', None, "You need enter host for freeipa", True)
+                'global', None, "You need enter host for freeipa")
+            return False
         if not self.settings['login']:
             self.collect_result(
-                'result', None, "You need enter admin login for freeipa", True)
+                'global', None, "You need enter admin login for freeipa")
+            return False
         if not self.settings['password']:
             self.collect_result(
-                'result', None, "You need enter admin password for freeipa", True)
+                'global', None, "You need enter admin password for freeipa")
+            return False
         if not self.settings['username']:
             self.collect_result(
-                'result', None, "You need enter username", True)
+                'global', None, "You need enter username")
+            return False
+        return True
 
-    def login(self) -> None:
+    def login(self) -> bool:
         url = self.settings['host'] + '/ipa/session/login_password'
         headers = {
             'Accept': 'text/plain',
@@ -86,7 +97,9 @@ class App:
 
         if response.status_code != 200:
             self.collect_result(
-                'result', None, "Can't login to freeipa", True)
+                'global', None, "Can't login to freeipa")
+            return False
+        return True
 
     def __request_freeipa_api(self, payload) -> object:
         url = self.settings['host'] + '/ipa/session/json'
@@ -100,16 +113,19 @@ class App:
 
         if response.status_code != 200:
             self.collect_result(
-                'result', None, "Can't exec query", True)
+                'result', None, "Can't exec query")
+            return None
 
         response = json.loads(response.text)
         if not response:
             self.collect_result(
-                'result', None, "Can't exec query", True)
+                'result', None, "Can't exec query")
+            return None
 
         if response['error']:
             self.collect_result(
-                'result', None, response['error'], True)
+                'result', None, response['error'])
+            return None
 
         return response['result']
 
@@ -175,15 +191,18 @@ class App:
             url, data=data, headers=headers, verify=False)
         if not response or response.status_code != 200:
             self.collect_result(
-                'global', {'status_code': response.status_code}, "Failed to generate one time link", True)
+                'global', {'status_code': response.status_code}, "Failed to generate one time link")
+            return None
         response = response.text.split('enigma.dev-my.games/view/')
         if not response or len(response) < 2:
             self.collect_result(
-                'global', {'status_code': response.status_code}, "Failed to generate one time link", True)
+                'global', {'status_code': response.status_code}, "Failed to generate one time link")
+            return None
         response = response[1].split('">')
         if not response or len(response) < 2 or not response[0]:
             self.collect_result(
-                'global', {'status_code': response.status_code}, "Failed to generate one time link", True)
+                'global', {'status_code': response.status_code}, "Failed to generate one time link")
+            return None
         return 'https://enigma.dev-my.games/view/' + str(response[0])
 
     def generate_new_password(self) -> str:
@@ -259,27 +278,30 @@ class App:
             self.collect_result('user', self.user)
             return
 
-    def main(self):
-        self.get_env()
-        self.get_params()
-        self.check_params()
-        self.login()
+    def main(self) -> object:
+
+        if not self.check_params():
+            return self.result
+
+        if not self.login():
+            return self.result
 
         self.user = self.get_user_info()
         if not self.user:
-            self.collect_result('user', self.user, "User not found!", True)
+            self.collect_result('user', self.user, "User not found!")
+            return self.result
 
         self.collect_result(
             'user_name', self.settings['username'])
 
         self.do_command()
-        self.show_result()
+
+        return self.result
 
 
 if __name__ == "__main__":
-    app = App()
+    app = Freeipa()
+    app.get_env()
+    app.get_params()
     app.main()
-    # app.get_params()
-    # app.reset_user_password()
-    # app.reset_user_otp()
-    # app.show_result()
+    app.show_result()
