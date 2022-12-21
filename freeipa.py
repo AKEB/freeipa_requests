@@ -151,7 +151,7 @@ class App:
             ]
         }
         result = self.__request_freeipa_api(payload)
-        if not result or 'failed' in result:
+        if not result or ('failed' in result and 'completed' in result and int(result['completed']) < 1):
             self.collect_result(
                 'group', result, "Failed add user to group")
         else:
