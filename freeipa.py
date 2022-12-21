@@ -1,5 +1,6 @@
 import requests
 import os
+import re
 import sys
 import json
 from urllib3.exceptions import InsecureRequestWarning
@@ -206,7 +207,22 @@ class Freeipa:
         return 'https://enigma.dev-my.games/view/' + str(response[0])
 
     def generate_new_password(self) -> str:
-        return self._random_base32(8, chars=b'0123456789ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.decode("unicode_escape"))
+        status = False
+        while not status:
+            password = self._random_base32(
+                8,
+                chars=b'123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.decode(
+                    "unicode_escape"
+                )
+            )
+            if re.search('[0-9]{2}', password) is None:
+                continue
+            if re.search('[A-Z]{2}', password) is None:
+                continue
+            if re.search('[a-z]{2}', password) is None:
+                continue
+            break
+        return password
 
     def _random_base32(self, length=16, random=random.SystemRandom(), chars=base64._b32alphabet.decode("unicode_escape")):
         return ''.join(random.choice(chars) for i in range(length))
@@ -305,4 +321,3 @@ if __name__ == "__main__":
     app.get_params()
     results = app.run_actions()
     print(json.dumps(results))
-    # app.show_result()
