@@ -151,7 +151,7 @@ class App:
             ]
         }
         result = self.__request_freeipa_api(payload)
-        if not result or result['failed']:
+        if not result or 'failed' in result:
             self.collect_result(
                 'group', result, "Failed add user to group")
         else:
@@ -222,7 +222,7 @@ class App:
             "id": 0
         }
         result = self.__request_freeipa_api(payload)
-        if not result or result['failed']:
+        if not result or 'failed' in result:
             self.collect_result(
                 'password', result, "Failed to reset user password")
         else:
