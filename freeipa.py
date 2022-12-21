@@ -2,6 +2,7 @@ import requests
 import os
 import sys
 import json
+from urllib3.exceptions import InsecureRequestWarning
 
 
 class App:
@@ -18,6 +19,9 @@ class App:
         self.settings['otp'] = False
 
         self.user = None
+
+        requests.packages.urllib3.disable_warnings(
+            category=InsecureRequestWarning)
 
         self.session = requests.Session()
 
@@ -135,6 +139,8 @@ class App:
         }
         result = self.__request_freeipa_api(payload)
         print(result)
+        if not result or result['failed']:
+            quit()
 
     def _generate_onetime_link(self) -> str:
         pass
