@@ -3,6 +3,8 @@ import os
 import sys
 import json
 from urllib3.exceptions import InsecureRequestWarning
+import random
+import base64
 
 
 class App:
@@ -112,7 +114,6 @@ class App:
         return response['result']
 
     def get_user_info(self) -> None:
-        # print("Get user (" + self.settings['username'] + ") info")
         payload = {
             "method": "user_show",
             "params": [
@@ -131,8 +132,7 @@ class App:
             return user['result']
         return None
 
-    def _add_user_to_group(self) -> None:
-        # print("Add user " + self.settings['username'] + " to group " + self.settings['group'])
+    def add_user_to_group(self) -> None:
         payload = {
             "method": "group_add_member",
             "params": [
@@ -153,20 +153,96 @@ class App:
         result = self.__request_freeipa_api(payload)
         if not result or result['failed']:
             self.collect_result(
-                'group', result, "Failed add user to group", True)
-        self.collect_result('group', result)
+                'group', result, "Failed add user to group")
+        else:
+            self.collect_result('group', result)
 
-    def _generate_onetime_link(self) -> str:
-        pass
+    def _generate_onetime_link(self, text) -> str:
+        url = 'https://enigma.dev-my.games/saveSecret'
+        headers = {
+            'Accept': 'application/json',
+            'Referer': 'https://enigma.dev-my.games/',
+            'Host': 'enigma.dev-my.games',
+            'Origin': 'https://enigma.dev-my.games',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        data = {
+            'secretMessage': text,
+            'secretKey': '',
+            'duration': 604800,
+        }
+        response = requests.post(
+            url, data=data, headers=headers, verify=False)
+        if not response or response.status_code != 200:
+            self.collect_result(
+                'global', {'status_code': response.status_code}, "Failed to generate one time link", True)
+        response = response.text.split('enigma.dev-my.games/view/')
+        if not response or len(response) < 2:
+            self.collect_result(
+                'global', {'status_code': response.status_code}, "Failed to generate one time link", True)
+        response = response[1].split('">')
+        if not response or len(response) < 2 or not response[0]:
+            self.collect_result(
+                'global', {'status_code': response.status_code}, "Failed to generate one time link", True)
+        return 'https://enigma.dev-my.games/view/' + str(response[0])
 
-    def _generate_new_password(self) -> str:
-        pass
+    def generate_new_password(self) -> str:
+        return self._random_base32(8, chars=b'0123456789ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.decode("unicode_escape"))
 
-    def _reset_user_password(self) -> None:
-        print("Reset user " + self.settings['username'] + " password")
+    def _random_base32(self, length=16, random=random.SystemRandom(), chars=base64._b32alphabet.decode("unicode_escape")):
+        return ''.join(random.choice(chars) for i in range(length))
 
-    def _reset_user_otp(self) -> None:
-        print("Reset user " + self.settings['username'] + " otp")
+    def generate_new_otp(self) -> str:
+        secret = self._random_base32(32)
+        return secret
+
+    def get_otp_uri(self, secret) -> str:
+        return f'otpauth://totp/%(name)s%%40my.games?secret=%(secret)s&issuer=CORP.MY.GAMES' % {'name': self.settings['username'], 'secret': secret}
+
+    def get_otp_qrcode_uri(self, otp) -> str:
+        return 'https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' + otp
+
+    def reset_user_password(self) -> None:
+        new_password = self.generate_new_password()
+        text = "username: " + self.settings['username'] + "\n"
+        text += "password: " + new_password + "\n"
+        payload = {
+            "method": "user_mod",
+            "params": [
+                [
+                ],
+                {
+                    "setattr": [
+                        "userpassword=" + new_password
+                    ],
+                    "uid": self.settings['username'],
+                    "version": "2.246"
+                }
+            ],
+            "id": 0
+        }
+        result = self.__request_freeipa_api(payload)
+        if not result or result['failed']:
+            self.collect_result(
+                'password', result, "Failed to reset user password")
+        else:
+            self.collect_result('password', result)
+
+        one_time_link = self._generate_onetime_link(text)
+        self.collect_result('password_link', one_time_link)
+
+    def reset_user_otp(self) -> None:
+        secret = self.generate_new_otp()
+        otpauth = self.get_otp_uri(secret)
+        qrcode_uri = self.get_otp_qrcode_uri(otpauth)
+        text = "secret: " + secret + "\n"
+        text += "otpauth: " + otpauth + "\n"
+        text += "URL for qrcode: " + qrcode_uri + "\n"
+
+        text = qrcode_uri
+        # TODO: Send New OTP to Freeipa
+        one_time_link = self._generate_onetime_link(text)
+        self.collect_result('otp', one_time_link)
 
     def do_command(self) -> None:
         if self.settings['check']:
@@ -175,11 +251,11 @@ class App:
 
         if self.settings['group'] or self.settings['reset'] or self.settings['otp']:
             if self.settings['group']:
-                self._add_user_to_group()
+                self.add_user_to_group()
             if self.settings['reset']:
-                self._reset_user_password()
+                self.reset_user_password()
             if self.settings['otp']:
-                self._reset_user_otp()
+                self.reset_user_otp()
         else:
             self.collect_result('user', self.user)
             return
@@ -196,6 +272,11 @@ class App:
         self.do_command()
         self.show_result()
 
+
 if __name__ == "__main__":
     app = App()
     app.main()
+    # app.get_params()
+    # app.reset_user_password()
+    # app.reset_user_otp()
+    # app.show_result()
