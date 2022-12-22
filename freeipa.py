@@ -207,8 +207,7 @@ class Freeipa:
         return 'https://enigma.dev-my.games/view/' + str(response[0])
 
     def generate_new_password(self) -> str:
-        status = False
-        while not status:
+        while True:
             password = self._random_base32(
                 8,
                 chars=b'123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'.decode(
