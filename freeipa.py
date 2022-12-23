@@ -279,6 +279,7 @@ class Freeipa:
             ],
             "id": 0
         }
+        print(payload)
         result = self.__request_freeipa_api(payload)
         print(result)
 
