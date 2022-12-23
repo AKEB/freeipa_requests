@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import json
+import time
 import urllib.parse
 from urllib3.exceptions import InsecureRequestWarning
 import random
@@ -215,7 +216,9 @@ class Freeipa:
             return None
         return 'https://' + self.settings['enigma_host'] + '/view/' + str(response[0])
 
-    def _create_onetime_link_for_picture(self, qrcode_uri) -> str:
+    def _create_onetime_link_for_picture(self, qrcode_uri, try_count: int = 1) -> str:
+        if try_count > 10:
+            return ''
         try:
             response = requests.get(qrcode_uri)
             headers = {
@@ -226,7 +229,10 @@ class Freeipa:
                                 data=response.content,
                                 headers=headers
                                 )
-            print(resp.text)
+            if resp.status_code != 200:
+                time.sleep(1)
+                try_count += 1
+                return self._create_onetime_link_for_picture(qrcode_uri, try_count)
             return resp.text.replace("\n", "")
         except Exception as e:
             print("ERROR send QR code")
