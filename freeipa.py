@@ -106,7 +106,7 @@ class Freeipa:
             url, data=post, headers=headers, verify=False, timeout=10)
 
         if response.status_code != 200:
-            print(response)
+            print(response.text)
             self.collect_result(
                 'global', response, "Can't login to freeipa")
             return False
