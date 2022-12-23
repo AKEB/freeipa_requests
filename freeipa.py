@@ -104,7 +104,7 @@ class Freeipa:
         }
         try:
             response = self.session.post(
-                url, data=post, headers=headers, verify=False, timeout=10)
+                url, params=post, headers=headers, verify=False, timeout=10)
             # print(response.request.headers)
             if response.status_code != 200:
                 self.collect_result(
