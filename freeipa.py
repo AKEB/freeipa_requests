@@ -133,7 +133,7 @@ class Freeipa:
 
         if response['error']:
             self.collect_result(
-                'result', None, response['error'])
+                'result', response, response['error'])
             return None
 
         return response['result']
@@ -302,7 +302,6 @@ class Freeipa:
             ],
             "id": 0
         }
-        print(payload)
         result = self.__request_freeipa_api(payload)
         print(result)
 
