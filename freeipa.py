@@ -289,9 +289,6 @@ class Freeipa:
                 ],
                 {
                     "ipatokenuniqueid": self.settings['username'] + "-totp",
-                    "type": "totp",
-                    "no_qrcode": True,
-                    "no_members": True,
                     "setattr": [
                         "ipatokenowner=" + self.settings['username'],
                         "ipatokenuniqueid=" +
