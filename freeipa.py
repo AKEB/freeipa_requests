@@ -103,11 +103,11 @@ class Freeipa:
             'password': self.settings['password']
         }
         response = self.session.post(
-            url, data=post, headers=headers, verify=False)
+            url, data=post, headers=headers, verify=False, timeout=10)
 
         if response.status_code != 200:
             self.collect_result(
-                'global', None, "Can't login to freeipa")
+                'global', response, "Can't login to freeipa")
             return False
         return True
 
