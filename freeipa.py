@@ -105,13 +105,14 @@ class Freeipa:
         try:
             response = self.session.post(
                 url, data=post, headers=headers, verify=False, timeout=10)
-            print(response.request.headers)
+            # print(response.request.headers)
             if response.status_code != 200:
                 self.collect_result(
                     'global', {'response': response.text}, "Can't login to freeipa")
                 return False
         except Exception as e:
-            print("Can't login to freeipa: " + e)
+            print("Can't login to freeipa: " + str(e))
+            return False
         return True
 
     def __request_freeipa_api(self, payload) -> object:
@@ -122,7 +123,7 @@ class Freeipa:
             'Content-Type': 'application/json'
         }
         response = self.session.post(
-            url, json=payload, headers=headers, verify=False)
+            url, json=payload, headers=headers, verify=False, timeout=10)
 
         if response.status_code != 200:
             self.collect_result(
