@@ -46,6 +46,12 @@ with open(settings['csv_file_name'], newline="\n") as fp_read:
     for row in reader:
         if len(row) < 4:
             continue
+        if len(row[1]) < 5:
+            continue
+        if len(row[2]) < 5:
+            continue
+        if len(row[3]) < 5:
+            continue
         destination = row[1]
         link1 = row[2]
         link2 = row[3]
