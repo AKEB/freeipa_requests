@@ -252,7 +252,7 @@ class Freeipa:
                 ],
                 {
                     "ipatokenowner": self.settings['username'],
-                    "ipatokenuniqueid": self.settings['username'] + "-hmg",
+                    "ipatokenuniqueid": self.settings['username'] + "-totp",
                     "version": "2.246",
                     "all": False
                 }
@@ -272,8 +272,8 @@ class Freeipa:
                 [
                 ],
                 {
-                    # "ipatokenowner": self.settings['username'],
-                    # "ipatokenuniqueid": self.settings['username'] + "-hmg",
+                    "ipatokenowner": self.settings['username'],
+                    "ipatokenuniqueid": self.settings['username'] + "-totp",
                     "setattr": [
                         "ipatokenowner=" + self.settings['username'],
                         "ipatokenuniqueid=" +
