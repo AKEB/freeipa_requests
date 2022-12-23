@@ -16,11 +16,15 @@ class Freeipa:
                  password: str = "",
                  username: str = "",
                  group: str = "",
+                 enigma_host: str = "",
+                 otp_issuer: str = "",
                  check: bool = False,
                  reset: bool = False,
                  otp: bool = False
                  ) -> None:
         self.settings = {}
+        self.settings['enigma_host'] = enigma_host
+        self.settings['otp_issuer'] = otp_issuer
         self.settings['host'] = host
         self.settings['login'] = login
         self.settings['password'] = password
@@ -45,6 +49,10 @@ class Freeipa:
             'FREEIPA_LOGIN') or self.settings['login']
         self.settings['password'] = os.environ.get(
             'FREEIPA_PASSWORD') or self.settings['password']
+        self.settings['enigma_host'] = os.environ.get(
+            'ENIGMA_HOST') or self.settings['enigma_host']
+        self.settings['otp_issuer'] = os.environ.get(
+            'OTP_ISSUER') or self.settings['otp_issuer']
 
     def get_params(self) -> None:
         for k, v in enumerate(sys.argv):
@@ -175,12 +183,12 @@ class Freeipa:
             self.collect_result('group', "ok")
 
     def _generate_onetime_link(self, text) -> str:
-        url = 'https://enigma.dev-my.games/saveSecret'
+        url = 'https://' + self.settings['enigma_host'] + '/saveSecret'
         headers = {
             'Accept': 'application/json',
-            'Referer': 'https://enigma.dev-my.games/',
-            'Host': 'enigma.dev-my.games',
-            'Origin': 'https://enigma.dev-my.games',
+            'Referer': 'https://' + self.settings['enigma_host'] + '/',
+            'Host': self.settings['enigma_host'],
+            'Origin': 'https://' + self.settings['enigma_host'],
             'Content-Type': 'application/x-www-form-urlencoded'
         }
         data = {
@@ -194,7 +202,7 @@ class Freeipa:
             self.collect_result(
                 'global', {'status_code': response.status_code}, "Failed to generate one time link")
             return None
-        response = response.text.split('enigma.dev-my.games/view/')
+        response = response.text.split(self.settings['enigma_host'] + '/view/')
         if not response or len(response) < 2:
             self.collect_result(
                 'global', {'status_code': response.status_code}, "Failed to generate one time link")
@@ -204,7 +212,7 @@ class Freeipa:
             self.collect_result(
                 'global', {'status_code': response.status_code}, "Failed to generate one time link")
             return None
-        return 'https://enigma.dev-my.games/view/' + str(response[0])
+        return 'https://' + self.settings['enigma_host'] + '/view/' + str(response[0])
 
     def generate_new_password(self) -> str:
         while True:
@@ -231,7 +239,7 @@ class Freeipa:
         return secret
 
     def get_otp_uri(self, secret) -> str:
-        return f'otpauth://totp/%(name)s%%40my.games?secret=%(secret)s&issuer=CORP.MY.GAMES' % {'name': self.settings['username'], 'secret': secret}
+        return f'otpauth://totp/%(name)s%?secret=%(secret)s&issuer=%(issuer)s' % {'name': self.settings['username'], 'secret': secret, 'issuer': self.settings['otp_issuer']}
 
     def get_otp_qrcode_uri(self, otp) -> str:
         return 'https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' + otp
@@ -265,7 +273,7 @@ class Freeipa:
                 {
                     "setattr": [
                         "ipatokenowner=" + self.settings['username'],
-                        "ipatokenname=" + self.settings['username'] + "-hmg",
+                        # "ipatokenname=" + self.settings['username'] + "-hmg",
                         "ipatokenuniqueid=" +
                         self.settings['username'] + "-hmg",
                         "type=totp",

@@ -9,6 +9,8 @@ settings = {}
 settings['host'] = os.environ.get('FREEIPA_HOST') or ""
 settings['login'] = os.environ.get('FREEIPA_LOGIN') or ""
 settings['password'] = os.environ.get('FREEIPA_PASSWORD') or ""
+settings['enigma_host'] = os.environ.get('ENIGMA_HOST') or ""
+settings['otp_issuer'] = os.environ.get('OTP_ISSUER') or ""
 settings['group'] = ""
 settings['check'] = False
 settings['reset'] = False
@@ -29,12 +31,16 @@ with open('users_ready.csv', 'w', newline="\n") as fp_write:
     with open('users_reset.csv', newline="\n") as fp_read:
         reader = csv.reader(fp_read, delimiter=";", quotechar='"')
         for row in reader:
-            if len(row) != 2:
+            if len(row) < 1:
+                continue
+            if len(str(row[0])) < 3:
                 continue
             ipa = freeipa.Freeipa(host=settings['host'],
                                   login=settings['login'],
                                   password=settings['password'],
                                   username=row[0],
+                                  enigma_host=settings['enigma_host'],
+                                  otp_issuer=settings['otp_issuer'],
                                   group=settings['group'],
                                   check=settings['check'],
                                   reset=settings['reset'],
@@ -45,3 +51,4 @@ with open('users_ready.csv', 'w', newline="\n") as fp_write:
             row.append(results['otp'])
             writer.writerow(row)
             print(results)
+print('Done')

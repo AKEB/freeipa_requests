@@ -10,16 +10,18 @@
 
 Параметры
 
-| Параметр        | Описание                   |
-| --------------- | -------------------------- |
-| -H \<host\>     | freeipa host with https:// |
-| -l \<login\>    | freeipa admin login        |
-| -p \<password\> | freeipa admin password     |
-| -u \<username\> | freeipa username           |
-| -c              | check login                |
-| -g \<group\>    | add to group               |
-| -r              | reset password             |
-| -o              | reset otp                  |
+| Параметр           | Описание                   |
+| ------------------ | -------------------------- |
+| -H \<host\>        | freeipa host with https:// |
+| -l \<login\>       | freeipa admin login        |
+| -p \<password\>    | freeipa admin password     |
+| -u \<username\>    | freeipa username           |
+| -i \<otp_issuer\>  | otp issuer                 |
+| -e \<enigma_host\> | enigma host                |
+| -c                 | check login                |
+| -g \<group\>       | add to group               |
+| -r                 | reset password             |
+| -o                 | reset otp                  |
 
 ## Сбросить пароль и OTP у списка пользователей
 
@@ -27,12 +29,14 @@
 
 Параметры
 
-| Параметр        | Описание                   |
-| --------------- | -------------------------- |
-| -H \<host\>     | freeipa host with https:// |
-| -l \<login\>    | freeipa admin login        |
-| -p \<password\> | freeipa admin password     |
-| -c              | check login                |
-| -g \<group\>    | add to group               |
-| -r              | reset password             |
-| -o              | reset otp                  |
+| Параметр           | Описание                   |
+| ------------------ | -------------------------- |
+| -H \<host\>        | freeipa host with https:// |
+| -l \<login\>       | freeipa admin login        |
+| -p \<password\>    | freeipa admin password     |
+| -i \<otp_issuer\>  | otp issuer                 |
+| -e \<enigma_host\> | enigma host                |
+| -c                 | check login                |
+| -g \<group\>       | add to group               |
+| -r                 | reset password             |
+| -o                 | reset otp                  |
