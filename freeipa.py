@@ -370,7 +370,8 @@ class Freeipa:
 
         one_time_link = self._create_onetime_link_for_picture(text)
         self.collect_result('otp', one_time_link)
-        self.collect_result('otp_verbose', qrcode_uri)
+        if self.settings['verbose']:
+            self.collect_result('otp_verbose', qrcode_uri)
 
     def do_command(self) -> None:
         if self.settings['check']:
