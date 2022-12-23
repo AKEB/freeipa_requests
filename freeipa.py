@@ -271,7 +271,7 @@ class Freeipa:
                 [
                 ],
                 {
-                    "ipatokenowner": self.settings['username']
+                    "ipatokenowner": self.settings['username'],
                     "ipatokenuniqueid": self.settings['username'] + "-hmg",
                     "no_qrcode": True,
                     "no_members": True,
