@@ -265,6 +265,7 @@ class Freeipa:
                 {
                     "setattr": [
                         "ipatokenowner=" + self.settings['username'],
+                        "name=" + self.settings['username'] + "-hmg",
                         "ipatokenuniqueid=" +
                         self.settings['username'] + "-hmg",
                         "type=totp",
