@@ -245,6 +245,7 @@ class Freeipa:
         return 'https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' + otp
 
     def _otp_token_find(self):
+        print("-= _otp_token_find =-")
         payload = {
             "method": "otptoken_find",
             "params": [
@@ -263,16 +264,30 @@ class Freeipa:
         print(result)
 
     def _otp_token_delete(self):
-        pass
+        print("-= _otp_token_delete =-")
+        payload = {
+            "method": "otptoken_del",
+            "params": [
+                [
+                ],
+                {
+                    "ipatokenuniqueid": self.settings['username'] + "-totp",
+                    "version": "2.246",
+                }
+            ],
+            "id": 0
+        }
+        result = self.__request_freeipa_api(payload)
+        print(result)
 
     def _otp_token_add(self, secret):
+        print("-= _otp_token_add =-")
         payload = {
             "method": "otptoken_add",
             "params": [
                 [
                 ],
                 {
-                    "ipatokenowner": self.settings['username'],
                     "ipatokenuniqueid": self.settings['username'] + "-totp",
                     "setattr": [
                         "ipatokenowner=" + self.settings['username'],
@@ -330,9 +345,11 @@ class Freeipa:
         text += "URL for qrcode: " + qrcode_uri + "\n"
 
         text = qrcode_uri
+        print("-------------")
         self._otp_token_find()
         self._otp_token_delete()
         self._otp_token_add(secret)
+        print("-------------")
 
         one_time_link = self._generate_onetime_link(text)
         self.collect_result('otp', one_time_link)
