@@ -122,18 +122,18 @@ class Freeipa:
 
         if response.status_code != 200:
             self.collect_result(
-                'result', None, "Can't exec query")
+                payload['method'], None, "Can't exec query")
             return None
 
         response = json.loads(response.text)
         if not response:
             self.collect_result(
-                'result', None, "Can't exec query")
+                payload['method'], None, "Can't exec query")
             return None
 
         if response['error']:
             self.collect_result(
-                'result', response, response['error'])
+                payload['method'], None, response['error'])
             return None
 
         return response['result']
