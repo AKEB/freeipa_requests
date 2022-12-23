@@ -42,3 +42,20 @@
 | -g \<group\>       | add to group               |
 | -r                 | reset password             |
 | -o                 | reset otp                  |
+
+## Отправка писем всем по списку
+
+```./mail_sender.sh -f users_ready.csv -t template_mail.txt```
+
+Параметры
+
+| Параметр                  | Описание               |
+| ------------------------- | ---------------------- |
+| -S \<smtp_server\>        | SMTP host              |
+| -L \<smtp_username\>      | SMTP username          |
+| -P \<smtp_password\>      | SMTP password          |
+| -s \<sender_email\>       | Sender E-mail          |
+| -f \<csv_file_name\>      | csv file name          |
+| -t \<template_file_name\> | template for mail send |
+| -b \<subject\>            | mail subject           |
+| -a \<attach_file\>        | attach file name       |
