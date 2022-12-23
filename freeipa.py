@@ -239,7 +239,7 @@ class Freeipa:
         return secret
 
     def get_otp_uri(self, secret) -> str:
-        return f'otpauth://totp/%(name)s%?secret=%(secret)s&issuer=%(issuer)s' % {'name': self.settings['username'], 'secret': secret, 'issuer': self.settings['otp_issuer']}
+        return f'otpauth://totp/%(name)s?secret=%(secret)s&issuer=%(issuer)s' % {'name': self.settings['username'], 'secret': secret, 'issuer': self.settings['otp_issuer']}
 
     def get_otp_qrcode_uri(self, otp) -> str:
         return 'https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' + otp
