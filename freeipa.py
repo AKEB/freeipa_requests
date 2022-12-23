@@ -342,6 +342,7 @@ class Freeipa:
         self._otp_token_find()
         self._otp_token_delete()
         self._otp_token_add(secret)
+        self._otp_token_find()
         print("-------------")
 
         one_time_link = self._generate_onetime_link(text)
