@@ -107,7 +107,7 @@ class Freeipa:
 
         if response.status_code != 200:
             self.collect_result(
-                'global', response.text, "Can't login to freeipa")
+                'global', response, "Can't login to freeipa")
             return False
         return True
 
