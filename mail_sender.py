@@ -71,6 +71,7 @@ with open(settings['csv_file_name'], newline="\n") as fp_read:
                               destination], msg.as_string())
             finally:
                 conn.quit()
+                print("mail send; " + destination)
         except:
             print("mail failed; " + destination)
             continue
