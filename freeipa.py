@@ -129,12 +129,12 @@ class Freeipa:
         response = json.loads(response.text)
         if not response:
             self.collect_result(
-                payload['method'], {'response': response.text}, "Can't exec query")
+                payload['method'], {'response': response}, "Can't exec query")
             return None
 
         if response['error']:
             self.collect_result(
-                payload['method'], {'response': response.text}, response['error'])
+                payload['method'], {'response': response}, response['error'])
             return None
 
         return response['result']
