@@ -273,17 +273,10 @@ class Freeipa:
                 {
                     "ipatokenowner": self.settings['username'],
                     "ipatokenuniqueid": self.settings['username'] + "-hmg",
-                    "no_qrcode": True,
-                    "no_members": True,
-                    "all": False,
-                    "type": "totp",
-                    "ipatokenotpkey": secret,
-                    "ipatokenotpalgorithm": "sha1",
-                    "ipatokenotpdigits": 6,
                     "setattr": [
                         "ipatokenowner=" + self.settings['username'],
                         "ipatokenuniqueid=" +
-                            self.settings['username'] + "-hmg",
+                        self.settings['username'] + "-hmg",
                         "type=totp",
                         "ipatokenotpkey=" + secret,
                         "ipatokenotpalgorithm=sha1",
