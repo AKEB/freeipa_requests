@@ -255,7 +255,7 @@ class Freeipa:
                     "ipatokenowner": self.settings['username'],
                     "ipatokenuniqueid": self.settings['username'] + "-totp",
                     "version": "2.246",
-                    "all": False
+                    "all": True
                 }
             ],
             "id": 0
