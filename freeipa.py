@@ -293,8 +293,13 @@ class Freeipa:
                     "ipatokenotpkey": secret,
                     "version": "2.246",
                     "type": 'totp',
+                    "ipatokenotpalgorithm": 'sha1',
+                    "ipatokenotpdigits": 6,
+                    "ipatokentotptimestep": 30,
+                    "ipatokentotpclockoffset": 0,
                     "all": True,
                     "raw": True,
+                    "no_qrcode": False,
                     "no_members": False
                 }
             ],
