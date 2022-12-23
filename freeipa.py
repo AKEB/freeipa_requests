@@ -226,6 +226,7 @@ class Freeipa:
                                 data=response.content,
                                 headers=headers
                                 )
+            print(resp.text)
             return resp.text.replace("\n", "")
         except Exception as e:
             print("ERROR send QR code")
