@@ -236,6 +236,23 @@ class Freeipa:
     def get_otp_qrcode_uri(self, otp) -> str:
         return 'https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' + otp
 
+    def _otp_token_find(self):
+        payload = {
+            "method": "otptoken_find",
+            "params": [
+                [
+                ],
+                {
+                    "ipatokenowner": self.settings['username'],
+                    "version": "2.246",
+                    "all": True
+                }
+            ],
+            "id": 0
+        }
+        result = self.__request_freeipa_api(payload)
+        print(result)
+
     def reset_user_password(self) -> None:
         new_password = self.generate_new_password()
         text = "username: " + self.settings['username'] + "\n"
@@ -273,6 +290,7 @@ class Freeipa:
 
         text = qrcode_uri
         # TODO: Send New OTP to Freeipa
+        self._otp_token_find()
 
         one_time_link = self._generate_onetime_link(text)
         self.collect_result('otp', one_time_link)
