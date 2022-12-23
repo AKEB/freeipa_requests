@@ -111,7 +111,6 @@ class Freeipa:
                     'global', {'response': response.text}, "Can't login to freeipa")
                 return False
         except Exception as e:
-
             print("Can't login to freeipa: " + e)
         return True
 
