@@ -96,20 +96,23 @@ class Freeipa:
         headers = {
             'Accept': 'text/plain',
             'Referer': self.settings['host'] + '/ipa',
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
         }
         post = {
             'user': self.settings['login'],
             'password': self.settings['password']
         }
-        response = self.session.post(
-            url, data=post, headers=headers, verify=False, timeout=10)
+        try:
+            response = self.session.post(
+                url, data=post, headers=headers, verify=False, timeout=10)
+            print(response.request.headers)
+            if response.status_code != 200:
+                self.collect_result(
+                    'global', {'response': response.text}, "Can't login to freeipa")
+                return False
+        except Exception as e:
 
-        if response.status_code != 200:
-            self.collect_result(
-                'global', {'response': response.text}, "Can't login to freeipa")
-            return False
-        print(response.request.headers)
+            print("Can't login to freeipa: " + e)
         return True
 
     def __request_freeipa_api(self, payload) -> object:

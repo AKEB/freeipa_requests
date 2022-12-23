@@ -37,4 +37,4 @@ do
     esac
 done
 
-python3 freeipa.py host=$host login=$login password=$password username=$username enigma_host=$enigma_host otp_issuer=$otp_issuer group=$group reset=$reset otp=$otp check=$check
+python3.8 freeipa.py host=$host login=$login password=$password username=$username enigma_host=$enigma_host otp_issuer=$otp_issuer group=$group reset=$reset otp=$otp check=$check
