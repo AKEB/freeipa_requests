@@ -333,6 +333,7 @@ class Freeipa:
             self.collect_result(
                 'password', result, "Failed to reset user password")
         else:
+            print(text)
             one_time_link = self._generate_onetime_link(text)
             self.collect_result('password', one_time_link)
 
