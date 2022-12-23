@@ -271,7 +271,7 @@ class Freeipa:
                 [
                 ],
                 {
-                    "ipatokenuniqueid": self.settings['username'] + "-hmg",
+                    "ipatokenuniqueid": self.settings['username'],  # + "-hmg",
                     "version": "2.246",
                 }
             ],
@@ -288,7 +288,7 @@ class Freeipa:
                 [
                 ],
                 {
-                    "ipatokenuniqueid": self.settings['username'] + "-hmg",
+                    "ipatokenuniqueid": self.settings['username'],  # + "-hmg",
                     "ipatokenowner": self.settings['username'],
                     "ipatokenotpkey": secret,
                     "version": "2.246",
