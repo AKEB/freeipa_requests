@@ -109,6 +109,7 @@ class Freeipa:
             self.collect_result(
                 'global', {'response': response.text}, "Can't login to freeipa")
             return False
+        print(response.request.headers)
         return True
 
     def __request_freeipa_api(self, payload) -> object:
