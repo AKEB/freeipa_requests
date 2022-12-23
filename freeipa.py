@@ -292,6 +292,7 @@ class Freeipa:
                     "ipatokenowner": self.settings['username'],
                     "ipatokenotpkey": secret,
                     "version": "2.246",
+                    "type": 'totp',
                     "all": True,
                     "raw": True,
                     "no_members": False
