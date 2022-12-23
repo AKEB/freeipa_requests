@@ -106,7 +106,6 @@ class Freeipa:
             url, data=post, headers=headers, verify=False, timeout=10)
 
         if response.status_code != 200:
-            print(response.text)
             self.collect_result(
                 'global', {'response': response.text}, "Can't login to freeipa")
             return False
@@ -124,18 +123,18 @@ class Freeipa:
 
         if response.status_code != 200:
             self.collect_result(
-                payload['method'], None, "Can't exec query")
+                payload['method'], {'response': response.text}, "Can't exec query")
             return None
 
         response = json.loads(response.text)
         if not response:
             self.collect_result(
-                payload['method'], None, "Can't exec query")
+                payload['method'], {'response': response.text}, "Can't exec query")
             return None
 
         if response['error']:
             self.collect_result(
-                payload['method'], None, response['error'])
+                payload['method'], {'response': response.text}, response['error'])
             return None
 
         return response['result']
@@ -207,12 +206,12 @@ class Freeipa:
         response = response.text.split(self.settings['enigma_host'] + '/view/')
         if not response or len(response) < 2:
             self.collect_result(
-                'global', {'status_code': response.status_code}, "Failed to generate one time link")
+                'global', None, "Failed to generate one time link")
             return None
         response = response[1].split('">')
         if not response or len(response) < 2 or not response[0]:
             self.collect_result(
-                'global', {'status_code': response.status_code}, "Failed to generate one time link")
+                'global', None, "Failed to generate one time link")
             return None
         return 'https://' + self.settings['enigma_host'] + '/view/' + str(response[0])
 
