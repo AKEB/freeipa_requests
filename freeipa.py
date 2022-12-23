@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import json
+import urllib.parse
 from urllib3.exceptions import InsecureRequestWarning
 import random
 import base64
@@ -214,6 +215,22 @@ class Freeipa:
             return None
         return 'https://' + self.settings['enigma_host'] + '/view/' + str(response[0])
 
+    def _create_onetime_link_for_picture(self, qrcode_uri) -> str:
+        try:
+            response = requests.get(qrcode_uri)
+            headers = {
+                'Max-Downloads': '1',
+                'Max-Days': '7',
+            }
+            resp = requests.put("https://tpic.dev-my.com/" + self.settings['username'] + ".png",
+                                data=response.content,
+                                headers=headers
+                                )
+            return resp.text
+        except:
+            print("ERROR send QR code")
+            return ''
+
     def generate_new_password(self) -> str:
         while True:
             password = self._random_base32(
@@ -343,7 +360,7 @@ class Freeipa:
         self._otp_token_delete()
         self._otp_token_add(secret)
 
-        one_time_link = self._generate_onetime_link(text)
+        one_time_link = self._create_onetime_link_for_picture(text)
         self.collect_result('otp', one_time_link)
 
     def do_command(self) -> None:
