@@ -12,6 +12,8 @@ settings['password'] = os.environ.get('FREEIPA_PASSWORD') or ""
 settings['enigma_host'] = os.environ.get('ENIGMA_HOST') or ""
 settings['otp_issuer'] = os.environ.get('OTP_ISSUER') or ""
 settings['group'] = ""
+settings['write_file'] = ""
+settings['read_file'] = ""
 settings['check'] = False
 settings['reset'] = False
 settings['otp'] = False
@@ -22,13 +24,13 @@ for k, v in enumerate(sys.argv):
         if len(t) == 2 and t[0] in settings and t[1]:
             settings[t[0]] = t[1]
 
-with open('users_ready.csv', 'w', newline="\n") as fp_write:
+with open(settings['write_file'], 'w', newline="\n") as fp_write:
     writer = csv.writer(fp_write,
                         delimiter=";",
                         quotechar='"',
                         quoting=csv.QUOTE_MINIMAL
                         )
-    with open('users_reset.csv', newline="\n") as fp_read:
+    with open(settings['read_file'], newline="\n") as fp_read:
         reader = csv.reader(fp_read, delimiter=";", quotechar='"')
         for row in reader:
             if len(row) < 1:

@@ -25,7 +25,7 @@
 
 ## Сбросить пароль и OTP у списка пользователей
 
-```./users_reset.sh -g <group_name> -r -o```
+```./users_reset.sh -R users_reset.csv -W users_ready.csv -g <group_name> -r -o```
 
 Параметры
 
@@ -36,6 +36,8 @@
 | -p \<password\>    | freeipa admin password     |
 | -i \<otp_issuer\>  | otp issuer                 |
 | -e \<enigma_host\> | enigma host                |
+| -W \<write_file\>  | csv write file             |
+| -R \<read_file\>   | csv read file              |
 | -c                 | check login                |
 | -g \<group\>       | add to group               |
 | -r                 | reset password             |
