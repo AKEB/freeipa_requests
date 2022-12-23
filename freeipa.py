@@ -253,6 +253,35 @@ class Freeipa:
         result = self.__request_freeipa_api(payload)
         print(result)
 
+    def _otp_token_delete(self):
+        pass
+
+    def _otp_token_add(self, secret):
+        payload = {
+            "method": "otptoken_add",
+            "params": [
+                [
+                ],
+                {
+                    "setattr": [
+                        "ipatokenowner=" + self.settings['username'],
+                        "ipatokenuniqueid=" +
+                        self.settings['username'] + "-hmg",
+                        "type=totp",
+                        "ipatokenotpkey=" + secret,
+                        "ipatokenotpalgorithm=sha1",
+                        "ipatokenotpdigits=6",
+                        "no_qrcode=true",
+                        "no_members=true"
+                    ],
+                    "version": "2.246"
+                }
+            ],
+            "id": 0
+        }
+        result = self.__request_freeipa_api(payload)
+        print(result)
+
     def reset_user_password(self) -> None:
         new_password = self.generate_new_password()
         text = "username: " + self.settings['username'] + "\n"
@@ -289,8 +318,9 @@ class Freeipa:
         text += "URL for qrcode: " + qrcode_uri + "\n"
 
         text = qrcode_uri
-        # TODO: Send New OTP to Freeipa
         self._otp_token_find()
+        self._otp_token_delete()
+        self._otp_token_add(secret)
 
         one_time_link = self._generate_onetime_link(text)
         self.collect_result('otp', one_time_link)
