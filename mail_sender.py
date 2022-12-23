@@ -58,7 +58,7 @@ with open(settings['csv_file_name'], newline="\n") as fp_read:
             msg['To'] = destination
             msg['From'] = settings['sender_email']
 
-            msg.attach(MIMEText(text, 'plain'))
+            msg.attach(MIMEText(text, 'html'))
 
             if part:
                 msg.attach(part)
