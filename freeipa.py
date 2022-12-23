@@ -253,7 +253,7 @@ class Freeipa:
                 ],
                 {
                     "ipatokenowner": self.settings['username'],
-                    "ipatokenuniqueid": self.settings['username'] + "-totp",
+                    "ipatokenuniqueid": self.settings['username'] + "-hmg",
                     "version": "2.246",
                     "all": True
                 }
@@ -271,7 +271,7 @@ class Freeipa:
                 [
                 ],
                 {
-                    "ipatokenuniqueid": self.settings['username'] + "-totp",
+                    "ipatokenuniqueid": self.settings['username'] + "-hmg",
                     "version": "2.246",
                 }
             ],
@@ -288,11 +288,11 @@ class Freeipa:
                 [
                 ],
                 {
-                    "ipatokenuniqueid": self.settings['username'] + "-totp",
+                    "ipatokenuniqueid": self.settings['username'] + "-hmg",
                     "setattr": [
                         "ipatokenowner=" + self.settings['username'],
                         "ipatokenuniqueid=" +
-                        self.settings['username'] + "-totp",
+                        self.settings['username'] + "-hmg",
                         "ipatokenotpkey=" + secret,
                         "ipatokenotpalgorithm=sha1",
                         "ipatokenotpdigits=6",
