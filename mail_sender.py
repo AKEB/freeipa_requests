@@ -72,7 +72,7 @@ with open(settings['csv_file_name'], newline="\n") as fp_read:
             finally:
                 conn.quit()
                 print("mail send; " + destination)
-        except:
+        except Exception as e:
             print("mail failed; " + destination)
             continue
 print('Done')

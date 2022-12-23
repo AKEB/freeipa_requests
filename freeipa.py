@@ -227,7 +227,7 @@ class Freeipa:
                                 headers=headers
                                 )
             return resp.text.replace("\n", "")
-        except:
+        except Exception as e:
             print("ERROR send QR code")
             return ''
 
