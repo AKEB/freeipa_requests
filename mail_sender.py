@@ -16,6 +16,7 @@ settings['subject'] = os.environ.get('MAIL_SUBJECT') or ""
 settings['attach_file'] = os.environ.get('MAIL_ATTACH') or ""
 settings['csv_file_name'] = ""
 settings['template_file_name'] = ""
+settings['verbose'] = False
 
 for k, v in enumerate(sys.argv):
     if v:

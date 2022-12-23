@@ -22,7 +22,8 @@ class Freeipa:
                  otp_issuer: str = "",
                  check: bool = False,
                  reset: bool = False,
-                 otp: bool = False
+                 otp: bool = False,
+                 verbose: bool = False
                  ) -> None:
         self.settings = {}
         self.settings['enigma_host'] = enigma_host
@@ -35,6 +36,7 @@ class Freeipa:
         self.settings['check'] = check
         self.settings['reset'] = reset
         self.settings['otp'] = otp
+        self.settings['verbose'] = verbose
 
         self.user = None
         self.result = {}
@@ -266,7 +268,7 @@ class Freeipa:
         return f'otpauth://totp/%(name)s?secret=%(secret)s&issuer=%(issuer)s' % {'name': self.settings['username'], 'secret': secret, 'issuer': self.settings['otp_issuer']}
 
     def get_otp_qrcode_uri(self, otp) -> str:
-        return 'https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' + otp
+        return 'https://www.google.com/chart?chs=200x200&chld=M|0&cht=qr&chl=' + urllib.parse.quote_plus(otp)
 
     def _otp_token_find(self):
         payload = {
@@ -350,6 +352,8 @@ class Freeipa:
             self.collect_result(
                 'password', result, "Failed to reset user password")
         else:
+            if self.settings['verbose']:
+                self.collect_result('password_verbose', new_password)
             one_time_link = self._generate_onetime_link(text)
             self.collect_result('password', one_time_link)
 
@@ -357,9 +361,6 @@ class Freeipa:
         secret = self.generate_new_otp()
         otpauth = self.get_otp_uri(secret)
         qrcode_uri = self.get_otp_qrcode_uri(otpauth)
-        text = "secret: " + secret + "\n"
-        text += "otpauth: " + otpauth + "\n"
-        text += "URL for qrcode: " + qrcode_uri + "\n"
 
         text = qrcode_uri
 
@@ -369,6 +370,7 @@ class Freeipa:
 
         one_time_link = self._create_onetime_link_for_picture(text)
         self.collect_result('otp', one_time_link)
+        self.collect_result('otp_verbose', qrcode_uri)
 
     def do_command(self) -> None:
         if self.settings['check']:

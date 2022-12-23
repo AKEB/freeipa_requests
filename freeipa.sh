@@ -19,7 +19,7 @@ usage() {
     exit 1; 
 }
 
-while getopts H:l:p:g:u:i:e:croh flag
+while getopts H:l:p:g:u:i:e:vcroh flag
 do
     case "${flag}" in
         H) host=${OPTARG};;
@@ -29,6 +29,7 @@ do
         u) username=${OPTARG};;
         i) otp_issuer=${OPTARG};;
         e) enigma_host=${OPTARG};;
+        v) verbose=1;;
         c) check=1;;
         r) reset=1;;
         o) otp=1;;
@@ -37,4 +38,4 @@ do
     esac
 done
 
-python3 freeipa.py host=$host login=$login password=$password username=$username enigma_host=$enigma_host otp_issuer=$otp_issuer group=$group reset=$reset otp=$otp check=$check
+python3 freeipa.py host=$host login=$login password=$password username=$username enigma_host=$enigma_host otp_issuer=$otp_issuer group=$group reset=$reset otp=$otp check=$check verbose=$verbose

@@ -17,6 +17,7 @@ settings['read_file'] = ""
 settings['check'] = False
 settings['reset'] = False
 settings['otp'] = False
+settings['verbose'] = False
 
 for k, v in enumerate(sys.argv):
     if v:
@@ -38,7 +39,8 @@ with open(settings['write_file'], 'w', newline="\n") as fp_write:
                           group=settings['group'],
                           check=settings['check'],
                           reset=settings['reset'],
-                          otp=settings['otp']
+                          otp=settings['otp'],
+                          verbose=settings['verbose']
                           )
     if ipa.login_session() is None:
         with open(settings['read_file'], newline="\n") as fp_read:

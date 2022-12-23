@@ -17,7 +17,7 @@ usage() {
     exit 1; 
 }
 
-while getopts S:L:P:s:f:t:b:a:h flag
+while getopts S:L:P:s:f:t:b:a:vh flag
 do
     case "${flag}" in
         S) smtp_server=${OPTARG};;
@@ -28,9 +28,10 @@ do
         t) template_file_name=${OPTARG};;
         b) subject=${OPTARG};;
         a) attach_file=${OPTARG};;
+        v) verbose=1;;
         h) usage;;
         *) usage;;
     esac
 done
 
-python3 mail_sender.py smtp_server=$smtp_server smtp_username=$smtp_username smtp_password=$smtp_password sender_email=$sender_email csv_file_name=$csv_file_name template_file_name=$template_file_name subject=$subject attach_file=$attach_file
+python3 mail_sender.py smtp_server=$smtp_server smtp_username=$smtp_username smtp_password=$smtp_password sender_email=$sender_email csv_file_name=$csv_file_name template_file_name=$template_file_name subject=$subject attach_file=$attach_file verbose=$verbose
