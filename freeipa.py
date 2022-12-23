@@ -85,10 +85,6 @@ class Freeipa:
             self.collect_result(
                 'global', None, "You need enter admin password for freeipa")
             return False
-        if not self.settings['username']:
-            self.collect_result(
-                'global', None, "You need enter username")
-            return False
         return True
 
     def login(self) -> bool:
@@ -383,12 +379,21 @@ class Freeipa:
             self.collect_result('user', self.user)
             return
 
-    def run_actions(self) -> object:
-
+    def login_session(self):
         if not self.check_params():
             return self.result
 
         if not self.login():
+            return self.result
+        return None
+
+    def set_user_name(self, username):
+        self.settings['username'] = username
+
+    def run_actions(self) -> object:
+        if not self.settings['username']:
+            self.collect_result(
+                'global', None, "You need enter username")
             return self.result
 
         self.user = self.get_user_info()
@@ -408,5 +413,6 @@ if __name__ == "__main__":
     app = Freeipa()
     app.get_env()
     app.get_params()
-    results = app.run_actions()
+    if app.login_session() is None:
+        results = app.run_actions()
     print(json.dumps(results))

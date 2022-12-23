@@ -30,27 +30,28 @@ with open(settings['write_file'], 'w', newline="\n") as fp_write:
                         quotechar='"',
                         quoting=csv.QUOTE_MINIMAL
                         )
-    with open(settings['read_file'], newline="\n") as fp_read:
-        reader = csv.reader(fp_read, delimiter=";", quotechar='"')
-        for row in reader:
-            if len(row) < 1:
-                continue
-            if len(str(row[0])) < 3:
-                continue
-            ipa = freeipa.Freeipa(host=settings['host'],
-                                  login=settings['login'],
-                                  password=settings['password'],
-                                  username=row[0],
-                                  enigma_host=settings['enigma_host'],
-                                  otp_issuer=settings['otp_issuer'],
-                                  group=settings['group'],
-                                  check=settings['check'],
-                                  reset=settings['reset'],
-                                  otp=settings['otp']
-                                  )
-            results = ipa.run_actions()
-            row.append(results['password'])
-            row.append(results['otp'])
-            writer.writerow(row)
-            print(results)
+    ipa = freeipa.Freeipa(host=settings['host'],
+                          login=settings['login'],
+                          password=settings['password'],
+                          enigma_host=settings['enigma_host'],
+                          otp_issuer=settings['otp_issuer'],
+                          group=settings['group'],
+                          check=settings['check'],
+                          reset=settings['reset'],
+                          otp=settings['otp']
+                          )
+    if ipa.login_session() is None:
+        with open(settings['read_file'], newline="\n") as fp_read:
+            reader = csv.reader(fp_read, delimiter=";", quotechar='"')
+            for row in reader:
+                if len(row) < 1:
+                    continue
+                if len(str(row[0])) < 3:
+                    continue
+                ipa.set_user_name(row[0])
+                results = ipa.run_actions()
+                row.append(results['password'])
+                row.append(results['otp'])
+                writer.writerow(row)
+                print(results)
 print('Done')
