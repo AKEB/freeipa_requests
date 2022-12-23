@@ -272,8 +272,8 @@ class Freeipa:
                 [
                 ],
                 {
-                    "ipatokenowner": self.settings['username'],
-                    "ipatokenuniqueid": self.settings['username'] + "-hmg",
+                    # "ipatokenowner": self.settings['username'],
+                    # "ipatokenuniqueid": self.settings['username'] + "-hmg",
                     "setattr": [
                         "ipatokenowner=" + self.settings['username'],
                         "ipatokenuniqueid=" +
