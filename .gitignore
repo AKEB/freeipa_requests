@@ -1,9 +1,6 @@
 .env
-test.txt
-users_reset.csv
-Google инструкция_.pdf
-template.txt
-users_ready.csv
-template.html
-test_users.csv
-test_users_ready.csv
+*.txt
+*.pdf
+*.csv
+template_ru.html
+template_en.html
