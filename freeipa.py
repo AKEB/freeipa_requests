@@ -426,9 +426,9 @@ class Freeipa:
         print(result)
         if not result or ('failed' in result and 'completed' in result and int(result['completed']) < 1):
             self.collect_result(
-                'user_add', None, "Failed add user")
+                'useradd', None, "Failed add user")
         else:
-            self.collect_result('user_add', "ok")
+            self.collect_result('useradd', "ok")
             self.add_user_to_group(["ipausers"])
 
     def set_user_name(self, username):
