@@ -161,13 +161,14 @@ class Freeipa:
             return user['result']
         return None
 
-    def add_user_to_group(self) -> None:
+    def add_user_to_group(self, groups: list = []) -> None:
+        if (self.settings['group'] and len(self.settings['group']) > 0):
+            groups.append(self.settings['group'])
+        
         payload = {
             "method": "group_add_member",
             "params": [
-                [
-                    self.settings['group']
-                ],
+                groups,
                 {
                     "all": False,
                     "no_members": False,
@@ -397,6 +398,37 @@ class Freeipa:
             return self.result
         return None
 
+    def user_add_to_freeipa(self, name: str, surname: str, email: str, telephonenumber: str = ""):
+        (username, domain) = email.split('@')
+        self.settings[username] = username
+        initials = ('-'.join([x[0] for x in name.split(' ') if x[0] == x[0].upper()])) + ('-'.join([x[0] for x in surname.split(' ') if x[0] == x[0].upper()]))
+        payload = {
+            "method": "user_add",
+            "params": [
+                [
+                ],
+                {
+                    "givenname": name,
+                    "sn": surname,
+                    "cn": ' '.join([name, surname]),
+                    "displayname": ' '.join([name, surname]),
+                    "mail": email,
+                    "uid": username,
+                    "initials": initials,
+                    "telephonenumber": telephonenumber,
+                    "version": "2.246"
+                }
+            ],
+            "id": 0
+        }
+        result = self.__request_freeipa_api(payload)
+        if not result or ('failed' in result and 'completed' in result and int(result['completed']) < 1):
+            self.collect_result(
+                'user_add', None, "Failed add user")
+        else:
+            self.collect_result('user_add', "ok")
+            self.add_user_to_group(["ipausers"])
+
     def set_user_name(self, username):
         self.settings['username'] = username
 
@@ -421,8 +453,11 @@ class Freeipa:
 
 if __name__ == "__main__":
     app = Freeipa()
-    app.get_env()
-    app.get_params()
-    if app.login_session() is None:
-        results = app.run_actions()
-    print(json.dumps(results))
+
+    app.user_add_to_freeipa('Ignacio', 'de Andres Rodriguez', 'ignacio.deandres@my.games')
+
+    # app.get_env()
+    # app.get_params()
+    # if app.login_session() is None:
+    #     results = app.run_actions()
+    # print(json.dumps(results))
