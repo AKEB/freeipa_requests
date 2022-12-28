@@ -421,7 +421,9 @@ class Freeipa:
             ],
             "id": 0
         }
+        print(payload)
         result = self.__request_freeipa_api(payload)
+        print(result)
         if not result or ('failed' in result and 'completed' in result and int(result['completed']) < 1):
             self.collect_result(
                 'user_add', None, "Failed add user")
@@ -453,11 +455,8 @@ class Freeipa:
 
 if __name__ == "__main__":
     app = Freeipa()
-
-    app.user_add_to_freeipa('Ignacio', 'de Andres Rodriguez', 'ignacio.deandres@my.games')
-
-    # app.get_env()
-    # app.get_params()
-    # if app.login_session() is None:
-    #     results = app.run_actions()
-    # print(json.dumps(results))
+    app.get_env()
+    app.get_params()
+    if app.login_session() is None:
+        results = app.run_actions()
+    print(json.dumps(results))
