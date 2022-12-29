@@ -181,7 +181,9 @@ class Freeipa:
         #         }
         #     ]
         # }
+        print(groups)
         for group in groups:
+            print(group)
             payload = {
                 "method": "group_add_member",
                 "params": [
