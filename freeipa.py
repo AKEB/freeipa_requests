@@ -32,9 +32,7 @@ class Freeipa:
         self.settings['login'] = login
         self.settings['password'] = password
         self.settings['username'] = username
-        print(group)
         self.settings['group'] = group.split(',')
-        print(self.settings['group'])
         self.settings['check'] = check
         self.settings['reset'] = reset
         self.settings['otp'] = otp
@@ -42,7 +40,6 @@ class Freeipa:
 
         self.user = None
         self.result = {}
-        print('InitFinish')
         requests.packages.urllib3.disable_warnings(
             category=InsecureRequestWarning)
 
@@ -65,7 +62,10 @@ class Freeipa:
             if v:
                 t = v.split("=")
                 if len(t) == 2 and t[0] in self.settings and t[1]:
+                    if t[0] == 'group':
+                        t[1] = t[1].split(',')
                     self.settings[t[0]] = t[1]
+
 
     def collect_result(self, key: str, result: object, error: str = None):
         self.result[key] = result
