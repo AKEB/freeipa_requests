@@ -201,7 +201,6 @@ class Freeipa:
                     [],
                     {
                         "cn": group,
-                        "group": group,
                         "user": self.settings['username'],
                         "version": "2.246"
                     }
