@@ -167,48 +167,21 @@ class Freeipa:
         if (self.settings['group'] and len(self.settings['group']) > 0):
             for group in self.settings['group']:
                 groups.append(group)
-
-        # payload = {
-        #     "method": "group_add_member",
-        #     "params": [
-        #         groups,
-        #         {
-        #             "all": False,
-        #             "no_members": False,
-        #             "raw": False,
-        #             "user": [
-        #                 self.settings['username']
-        #             ],
-        #             "version": "2.246"
-        #         }
-        #     ]
-        # }
-        # payload = {
-        #     "method": "group_find",
-        #     "params": [
-        #         [],
-        #         {
-        #             "version": "2.246"
-        #         }
-        #     ]
-        # }
-        # result = self.__request_freeipa_api(payload)
-        # print(result)
         for group in groups:
-            print('REMOVE')
-            payload = {
-                "method": "group_remove_member",
-                "params": [
-                    [],
-                    {
-                        "cn": group,
-                        "user": self.settings['username'],
-                        "version": "2.246"
-                    }
-                ]
-            }
-            result = self.__request_freeipa_api(payload)
-            print(result)
+            # print('REMOVE')
+            # payload = {
+            #     "method": "group_remove_member",
+            #     "params": [
+            #         [],
+            #         {
+            #             "cn": group,
+            #             "user": self.settings['username'],
+            #             "version": "2.246"
+            #         }
+            #     ]
+            # }
+            # result = self.__request_freeipa_api(payload)
+            # print(result)
             
             print('ADD')
             payload = {
