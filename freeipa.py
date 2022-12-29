@@ -430,7 +430,7 @@ class Freeipa:
                     "uid": username,
                     "initials": initials,
                     "telephonenumber": telephonenumber,
-                    "ipauserauthtype": 'otp'
+                    "ipauserauthtype": 'otp',
                     "version": "2.246"
                 }
             ],
