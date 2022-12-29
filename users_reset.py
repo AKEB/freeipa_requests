@@ -15,6 +15,7 @@ settings['group'] = ""
 settings['write_file'] = ""
 settings['read_file'] = ""
 settings['check'] = False
+settings['fix'] = False
 settings['reset'] = False
 settings['otp'] = False
 settings['verbose'] = False
@@ -40,7 +41,8 @@ with open(settings['write_file'], 'w', newline="\n") as fp_write:
                           check=settings['check'],
                           reset=settings['reset'],
                           otp=settings['otp'],
-                          verbose=settings['verbose']
+                          verbose=settings['verbose'],
+                          fix=settings['fix'],
                           )
     if ipa.login_session() is None:
         with open(settings['read_file'], newline="\n") as fp_read:
@@ -52,8 +54,8 @@ with open(settings['write_file'], 'w', newline="\n") as fp_write:
                     continue
                 ipa.set_user_name(row[0])
                 results = ipa.run_actions()
-                row.append(results['password'])
-                row.append(results['otp'])
+                row.append(results['password'] if 'password' in results else '')
+                row.append(results['otp'] if 'otp' in results else '')
                 writer.writerow(row)
                 print(results)
 print('Done')

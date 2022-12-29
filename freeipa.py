@@ -23,7 +23,8 @@ class Freeipa:
                  check: bool = False,
                  reset: bool = False,
                  otp: bool = False,
-                 verbose: bool = False
+                 verbose: bool = False,
+                 fix: bool = False
                  ) -> None:
         self.settings = {}
         self.settings['enigma_host'] = enigma_host
@@ -37,6 +38,7 @@ class Freeipa:
         self.settings['reset'] = reset
         self.settings['otp'] = otp
         self.settings['verbose'] = verbose
+        self.settings['fix'] = fix
 
         self.user = None
         self.result = {}
@@ -65,7 +67,6 @@ class Freeipa:
                     if t[0] == 'group':
                         t[1] = t[1].split(',')
                     self.settings[t[0]] = t[1]
-
 
     def collect_result(self, key: str, result: object, error: str = None):
         self.result[key] = result
@@ -168,20 +169,6 @@ class Freeipa:
             for group in self.settings['group']:
                 groups.append(group)
         for group in groups:
-            # print('REMOVE')
-            # payload = {
-            #     "method": "group_remove_member",
-            #     "params": [
-            #         [],
-            #         {
-            #             "cn": group,
-            #             "user": self.settings['username'],
-            #             "version": "2.246"
-            #         }
-            #     ]
-            # }
-            # result = self.__request_freeipa_api(payload)
-            # print(result)
             payload = {
                 "method": "group_add_member",
                 "params": [
@@ -344,6 +331,27 @@ class Freeipa:
         }
         result = self.__request_freeipa_api(payload)
 
+    def user_fix(self):
+        payload = {
+            "method": "user_mod",
+            "params": [
+                [
+                ],
+                {
+                    "ipauserauthtype": 'otp',
+                    "uid": self.settings['username'],
+                    "version": "2.246"
+                }
+            ],
+            "id": 0
+        }
+        result = self.__request_freeipa_api(payload)
+        if not result or 'failed' in result:
+            self.collect_result(
+                'ipauserauthtype', result, "Failed set ipauserauthtype")
+        else:
+            self.collect_result('ipauserauthtype', 'ok')
+
     def reset_user_password(self) -> None:
         new_password = self.generate_new_password()
         text = "username: " + self.settings['username'] + "\n"
@@ -400,6 +408,8 @@ class Freeipa:
                 self.reset_user_password()
             if self.settings['otp']:
                 self.reset_user_otp()
+            if self.settings['fix']:
+                self.user_fix()
         else:
             self.collect_result('user', self.user)
             return
