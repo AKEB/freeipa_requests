@@ -195,6 +195,22 @@ class Freeipa:
         # result = self.__request_freeipa_api(payload)
         # print(result)
         for group in groups:
+            print('REMOVE')
+            payload = {
+                "method": "group_remove_member",
+                "params": [
+                    [],
+                    {
+                        "cn": group,
+                        "user": self.settings['username'],
+                        "version": "2.246"
+                    }
+                ]
+            }
+            result = self.__request_freeipa_api(payload)
+            print(result)
+            
+            print('ADD')
             payload = {
                 "method": "group_add_member",
                 "params": [
