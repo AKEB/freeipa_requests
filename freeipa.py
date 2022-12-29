@@ -183,19 +183,17 @@ class Freeipa:
         #         }
         #     ]
         # }
-        for group in groups:
-            payload = {
-                "method": "group_add",
-                "params": [
-                    [],
-                    {
-                        "cn": group,
-                        "version": "2.246"
-                    }
-                ]
-            }
-            result = self.__request_freeipa_api(payload)
-            print(result)
+        payload = {
+            "method": "group_find",
+            "params": [
+                [],
+                {
+                    "version": "2.246"
+                }
+            ]
+        }
+        result = self.__request_freeipa_api(payload)
+        print(result)
         # for group in groups:
         #     payload = {
         #         "method": "group_add_member",
