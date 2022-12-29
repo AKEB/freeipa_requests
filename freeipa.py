@@ -183,23 +183,33 @@ class Freeipa:
         #         }
         #     ]
         # }
-        print(groups)
         for group in groups:
-            print(group)
             payload = {
-                "method": "group_add_member",
+                "method": "group_add",
                 "params": [
                     [],
                     {
                         "cn": group,
-                        "group": group,
-                        "user": self.settings['username'],
                         "version": "2.246"
                     }
                 ]
             }
             result = self.__request_freeipa_api(payload)
             print(result)
+        # for group in groups:
+        #     payload = {
+        #         "method": "group_add_member",
+        #         "params": [
+        #             [],
+        #             {
+        #                 "cn": group,
+        #                 "group": group,
+        #                 "user": self.settings['username'],
+        #                 "version": "2.246"
+        #             }
+        #         ]
+        #     }
+        #     result = self.__request_freeipa_api(payload)
         # if not result or ('failed' in result and 'completed' in result and int(result['completed']) < 1):
         #     self.collect_result(
         #         'group', None, "Failed add user to group")
