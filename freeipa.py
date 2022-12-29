@@ -32,7 +32,7 @@ class Freeipa:
         self.settings['login'] = login
         self.settings['password'] = password
         self.settings['username'] = username
-        self.settings['group'] = group
+        self.settings['group'] = group.split(',')
         self.settings['check'] = check
         self.settings['reset'] = reset
         self.settings['otp'] = otp
@@ -163,29 +163,44 @@ class Freeipa:
 
     def add_user_to_group(self, groups: list = []) -> None:
         if (self.settings['group'] and len(self.settings['group']) > 0):
-            groups.append(self.settings['group'])
-        
-        payload = {
-            "method": "group_add_member",
-            "params": [
-                groups,
-                {
-                    "all": False,
-                    "no_members": False,
-                    "raw": False,
-                    "user": [
-                        self.settings['username']
-                    ],
-                    "version": "2.246"
-                }
-            ]
-        }
-        result = self.__request_freeipa_api(payload)
-        if not result or ('failed' in result and 'completed' in result and int(result['completed']) < 1):
-            self.collect_result(
-                'group', None, "Failed add user to group")
-        else:
-            self.collect_result('group', "ok")
+            for group in self.settings['group']:
+                groups.append(group)
+
+        # payload = {
+        #     "method": "group_add_member",
+        #     "params": [
+        #         groups,
+        #         {
+        #             "all": False,
+        #             "no_members": False,
+        #             "raw": False,
+        #             "user": [
+        #                 self.settings['username']
+        #             ],
+        #             "version": "2.246"
+        #         }
+        #     ]
+        # }
+        for group in groups:
+            payload = {
+                "method": "group_add_member",
+                "params": [
+                    [],
+                    {
+                        "cn": group,
+                        "group": group,
+                        "user": self.settings['username'],
+                        "version": "2.246"
+                    }
+                ]
+            }
+            result = self.__request_freeipa_api(payload)
+            print(result)
+        # if not result or ('failed' in result and 'completed' in result and int(result['completed']) < 1):
+        #     self.collect_result(
+        #         'group', None, "Failed add user to group")
+        # else:
+        #     self.collect_result('group', "ok")
 
     def _generate_onetime_link(self, text) -> str:
         url = 'https://' + self.settings['enigma_host'] + '/saveSecret'
@@ -339,9 +354,8 @@ class Freeipa:
                 [
                 ],
                 {
-                    "setattr": [
-                        "userpassword=" + new_password
-                    ],
+                    "ipauserauthtype": 'otp',
+                    "userpassword": new_password,
                     "uid": self.settings['username'],
                     "version": "2.246"
                 }
@@ -416,6 +430,7 @@ class Freeipa:
                     "uid": username,
                     "initials": initials,
                     "telephonenumber": telephonenumber,
+                    "ipauserauthtype": 'otp'
                     "version": "2.246"
                 }
             ],
