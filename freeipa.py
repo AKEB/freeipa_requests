@@ -182,7 +182,7 @@ class Freeipa:
             }
             result = self.__request_freeipa_api(payload)
             if not result or ('failed' in result and 'completed' in result and int(result['completed']) < 1):
-                if ('failed' in result and 'member' in result['failed'] and 'user' in result['failed']['member'] and len(result['failed']['member']['user']) > 0 and len(result['failed']['member']['user'][0]) > 1):
+                if result and ('failed' in result and 'member' in result['failed'] and 'user' in result['failed']['member'] and len(result['failed']['member']['user']) > 0 and len(result['failed']['member']['user'][0]) > 1):
                     self.collect_result('group_' + group, None, str(result['failed']['member']['user'][0][1]))
                 else:
                     self.collect_result('group_' + group, None, "Failed add user to group")
