@@ -52,7 +52,9 @@ with open(settings['write_file'], 'w', newline="\n") as fp_write:
                     continue
                 if len(str(row[0])) < 3:
                     continue
+                ipa.erase_results()
                 ipa.set_user_name(row[0])
+                results = {}
                 results = ipa.run_actions()
                 row.append(results['password'] if 'password' in results else '')
                 row.append(results['otp'] if 'otp' in results else '')

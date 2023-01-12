@@ -456,6 +456,9 @@ class Freeipa:
             self.collect_result('useradd', "ok")
             self.add_user_to_group(["ipausers"])
 
+    def erase_results(self):
+        self.result = {}
+
     def set_user_name(self, username):
         self.settings['username'] = username
 
