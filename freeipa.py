@@ -367,7 +367,7 @@ class Freeipa:
                     "ipauserauthtype": 'otp',
                     "userpassword": new_password,
                     "uid": self.settings['username'],
-                    "krbpasswordexpiration": str(date.strftime("%Y-%m-%d %H:%M:%S")),
+                    "krbpasswordexpiration": str(date.strftime("%Y-%m-%dT%H:%M:%SZ")),
                     "version": "2.246"
                 }
             ],
