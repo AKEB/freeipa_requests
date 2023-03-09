@@ -54,7 +54,7 @@ with open(settings['write_file'], 'w', newline="\n") as fp_write:
                     continue
                 email = row[2]
                 (username, domain) = email.split('@')
-                ipa.user_add_to_freeipa(row[0], row[1], email, "")
+                ipa.user_add_to_freeipa(row[0], row[1], email, str(row[4]))
                 ipa.set_user_name(username)
                 results = ipa.run_actions()
 

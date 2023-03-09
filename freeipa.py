@@ -8,6 +8,7 @@ import urllib.parse
 from urllib3.exceptions import InsecureRequestWarning
 import random
 import base64
+import datetime
 
 
 class Freeipa:
@@ -356,6 +357,7 @@ class Freeipa:
         new_password = self.generate_new_password()
         text = "username: " + self.settings['username'] + "\n"
         text += "password: " + new_password + "\n"
+        date = (datetime.datetime.now() + datetime.timedelta(days=90))
         payload = {
             "method": "user_mod",
             "params": [
@@ -365,6 +367,7 @@ class Freeipa:
                     "ipauserauthtype": 'otp',
                     "userpassword": new_password,
                     "uid": self.settings['username'],
+                    "krbpasswordexpiration": str(date.strftime("%Y-%m-%d %H:%M:%S")),
                     "version": "2.246"
                 }
             ],

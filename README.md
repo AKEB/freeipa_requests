@@ -59,3 +59,23 @@
 | -t \<template_file_name\> | template for mail send |
 | -b \<subject\>            | mail subject           |
 | -a \<attach_file\>        | attach file name       |
+
+## Отправка писем всем по списку
+
+```./users_create.sh -R users_create_v1.csv -W users_create_v1_ready.csv -g app_gmail -r -o```
+
+Параметры
+
+| Параметр           | Описание                   |
+| ------------------ | -------------------------- |
+| -H \<host\>        | freeipa host with https:// |
+| -l \<login\>       | freeipa admin login        |
+| -p \<password\>    | freeipa admin password     |
+| -i \<otp_issuer\>  | otp issuer                 |
+| -e \<enigma_host\> | enigma host                |
+| -W \<write_file\>  | csv write file             |
+| -R \<read_file\>   | csv read file              |
+| -c                 | check login                |
+| -g \<group\>       | add to group               |
+| -r                 | reset password             |
+| -o                 | reset otp                  |
