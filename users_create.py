@@ -63,6 +63,7 @@ with open(settings['write_file'], 'w', newline="\n") as fp_write:
                 new_row.append(row[3].lower())
                 new_row.append(results['password'] if 'password' in results else '')
                 new_row.append(results['otp'] if 'otp' in results else '')
+                new_row.append(domain)
                 writer.writerow(new_row)
                 print(results)
 print('Done')
