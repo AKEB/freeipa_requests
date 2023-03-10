@@ -367,6 +367,18 @@ class Freeipa:
                     "ipauserauthtype": 'otp',
                     "userpassword": new_password,
                     "uid": self.settings['username'],
+                    "version": "2.246"
+                }
+            ],
+            "id": 0
+        }
+        payload_second = {
+            "method": "user_mod",
+            "params": [
+                [
+                ],
+                {
+                    "uid": self.settings['username'],
                     "krbpasswordexpiration": str(date.strftime("%Y-%m-%dT%H:%M:%SZ")),
                     "version": "2.246"
                 }
@@ -375,9 +387,11 @@ class Freeipa:
         }
         result = self.__request_freeipa_api(payload)
         if not result or 'failed' in result:
-            self.collect_result(
-                'password', result, "Failed to reset user password")
+            self.collect_result('password', result, "Failed to reset user password")
         else:
+            result_second = self.__request_freeipa_api(payload_second)
+            if not result_second or 'failed' in result_second:
+                self.collect_result('password_expiration', result_second, "Failed to set password expiration time")
             if self.settings['verbose']:
                 self.collect_result('password_verbose', new_password)
             one_time_link = self._generate_onetime_link(text)
