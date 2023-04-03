@@ -56,8 +56,9 @@ with open(settings['csv_file_name'], newline="\n") as fp_read:
         destination = row[1]
         link1 = row[2]
         link2 = row[3]
+        domain = row[4] or "my.games"
 
-        text = template.format(link2, link1)
+        text = template.format(link2, link1, domain)
 
         try:
             msg = MIMEMultipart()

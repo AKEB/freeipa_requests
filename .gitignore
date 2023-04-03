@@ -5,3 +5,5 @@ env/
 *.csv
 template_ru.html
 template_en.html
+freeipa.cpython-311.pyc
+template.html
