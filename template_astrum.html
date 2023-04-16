@@ -1,0 +1,113 @@
+<body style="font-size: 1.3rem;">
+	<p>Привет!</p>
+	<p><b>Подготовили подробный гайд для настройки доступа в новые сервисы 
+		Astrum Entertainment — он поможет тебе разобраться, как устроена 
+		авторизация для почты, мессенджера и внутренних систем.</b></p>
+	
+	<h3><b>Что важно знать в первую очередь:</b></h3>
+	<ul>
+		<li><b>Для авторизации в почте</b> используется уникальный пароль, который предназначен только 
+			для почтового сервиса Astrum Entertainment.</li>
+		<li><b>Для авторизации во внутренних системах</b> будет использоваться двухфакторная аутентификация, 
+			ниже можно найти инструкцию и одноразовые ссылки.</li>
+		<li><b>Для входа в мессенджер</b> используется короткий одноразовый пароль, который генерируется в 
+			момент авторизации и отправляется вам на почту.</li>
+	</ul>
+	
+	<h3><b>&mdash; Авторизация в корпоративном почтовом аккаунте Astrum Entertainment на базе Mail.ru</b></h3>
+	<p>Адрес почтового ящика имеет следующий вид: <b>user.name@{2}</b> (обычно вида name.surname).</p>
+	<p>user.name и password доступны по ссылке - <a href="{3}" target="_blank">{3}</a> 
+		<span style="color: red;">(Внимание! Ссылка одноразовая!)</span>.<br/>
+		<b>При первом открытии ссылки обязательно запомните user.name и password!</b></p>
+	<ul>
+		<li>Для авторизации в браузере на сайте mail.ru наберите в окне авторизации полное 
+			наименование аккаунта вместе с окончанием <b>@{2}</b>, нажмите 
+			кнопку “<b>Ввести пароль</b>”;</li>
+		<li>Введите пароль от почты, который был вами получен ранее, и нажмите “<b>Войти</b>”;</li>
+		<li>Далее потребуется привязать свой номер телефона для двухфакторной аутентификации 
+			(с использованием одноразового цифрового пароля, получаемого по СМС).</li>
+	</ul>
+	<p>Также почта может быть открыта в любом браузере и настроена с помощью службы техподдержки в MS Outlook и других почтовых приложениях, 
+		в том числе и мобильных. При настройке корпоративного почтового аккаунта в стороннем приложении, например, на мобильном устройстве, 
+		используйте <a href="https://help.mail.ru/mail/security/protection/external" target="_blank">пароль для внешнего приложения</a></p>
+
+	<h3><b>&mdash; Настройки новой двухфакторной аутентификации для внутренних сервисов Astrum Entertainment</b></h3>
+	<p>Ниже можно найти одноразовые ссылки c паролем и секретом для токена OTP, которые потребуются для аутентификации в 
+		<a href="https://jira.astrum.team" target="_blank">https://jira.astrum.team</a> и остальные сервисы.</p>
+	<ol>
+		<li>
+			<p>Скачайте приложение Google Authenticator в <a href="https://apps.apple.com/app/google-authenticator/id388497605">AppStore</a> или <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Google Play</a>.</p>
+		</li>
+		<li>
+			<p>Войдите в приложение и нажмите на плюсик в правом нижнем углу. Далее выберете пункт “Сканировать QR-код” 
+				(Scan a QR code). Отсканируйте QR-код по этой ссылке - <a href="{0}">{0}</a> 
+				<span style="color: red;">(Внимание! Ссылка одноразовая!)</span>.
+				<br/>Теперь в приложении у вас появилась строка с одноразовым паролем, который изменяется каждый 30 секунд 
+				(это аналог пароля на физическом токене, только в приложении). Называется этот пароль - OTP (One Time Password).</p>
+		</li>
+		<li>
+			<p>Откройте страницу <a href="https://jira.astrum.team">https://jira.astrum.team</a> и авторизуйтесь в Jira. 
+				Используйте адрес вашего нового почтового ящика, выберите кнопку <b>Login with astrum.team</b>.
+				<br/>Адрес почтового ящик имеет следующий вид: <b>user.name@{2}</b> (обычно вида name.surname).
+				<br/><b>user.name</b> и <b>password</b> доступны по ссылке - <a href="{1}">{1}</a> 
+				<span style="color: red;">(Внимание! Ссылка одноразовая!)</span>. 
+				<b>При первом открытии ссылки обязательно запомните user.name и password!</b>
+			</p>
+		</li>
+		<li>
+			<p>Далее откроется страница аутентификации astrum.team, которая будет использоваться для входа во все корпоративные сервисы astrum.team</p>
+		</li>
+		<li>
+			<p>В поле <b>Username or email</b> введите ваш user.name, который вы получили по одноразовой ссылке выше. 
+			Он совпадает с левой частью вашего почтового адреса.</p>
+		</li>
+		<li>
+			<p>В поле <b>Password</b> введите пароль, который состоит из двух частей:
+			<br/><b>password</b> (который вы получили по одноразовой ссылке выше) + <b>ОТР</b> (из приложения Google Authenticator).</p>
+		</li>
+		<li>
+			<p>Нажмите Sign In и войдите в ваш корпоративный аккаунт.</p>
+		</li>
+
+	</ol>
+
+	<h3><b>&mdash; Авторизация в новом мессенджере VK Teams в инфраструктуре Astrum Entertainment</b></h3>
+	<p>
+		Обращаем внимание, что в мессенджере <b>VK Teams</b> нет возможности войти сразу в два аккаунта 
+		(corp.mail.ru и astrum.team). В течение переходного периода рекомендуем использовать для 
+		коммуникации с коллегами из Astrum Entertainment Desktop-версию, а для прежнего аккаунта (corp.mail.ru) 
+		WEB-версию. На мобильном устройстве необходимо будет перелогиниться в аккаунт Astrum Entertainment.
+	</p>
+	<p>Ссылки для скачивания и установки приложения:</p>
+	<ul>
+		<li><b>WEB-версия</b> – <a href="https://myteam.mail.ru/webim/" target="_blank">https://myteam.mail.ru/webim/</a></li>
+		<li><b>iOS</b> – <a href="https://itunes.apple.com/ru/app/id1459096573?mt=8" target="_blank">https://itunes.apple.com/ru/app/id1459096573?mt=8</a></li>
+		<li><b>Android</b> – <a href="https://play.google.com/store/apps/details?id=ru.mail.biz.avocado" target="_blank">https://play.google.com/store/apps/details?id=ru.mail.biz.avocado</a></li>
+		<li><b>Windows</b> – <a href="https://vkteams-www.hb.bizmrg.com/win/x32/vkteamssetup.exe" target="_blank">https://vkteams-www.hb.bizmrg.com/win/x32/vkteamssetup.exe</a></li>
+		<li><b>Mac</b> – <a href="https://vkteams-www.hb.bizmrg.com/mac/x64/vkteams.dmg" target="_blank">https://vkteams-www.hb.bizmrg.com/mac/x64/vkteams.dmg</a></li>
+		<li><b>Linux</b> – <a href="https://vkteams-www.hb.bizmrg.com/linux/x64/vkteams.tar.xz" target="_blank">https://vkteams-www.hb.bizmrg.com/linux/x64/vkteams.tar.xz</a></li>
+	</ul>
+	<p>Для входа в мессенджер сделайте следующее:</p>
+	<ul>
+		<li><p>
+			<b>В WEB-версии</b> нажмите на кнопку “Принять и продолжить” и введите Username как для почты, нажмите кнопку “Войти”. 
+			Далее введите одноразовый пароль, который в этот момент отправился вам на почту.
+		</p></li>
+		<li><p>
+			<b>В приложениях для смартфонов и компьютеров</b> сначала нужно будет разлогиниться из текущего аккаунта 
+			(Настройки -> Аккаунт -> <span style="color: red;">Выйти</span>), затем нажать на кнопку “Принять и продолжить”, ввести Username как 
+			для почты и нажать на кнопку “Войти”. Далее введите одноразовый пароль, который в этот момент отправился 
+			вам на почту.
+		</p></li>
+	</ul>
+
+	<p>Напомним, в случае возникновения проблем, вы всегда можете обратиться к нам:</p>
+	<ul>
+		<li><p>поставить задачу в <a href="https://jira.astrum.team" target="_blank">https://jira.astrum.team</a> на проект "Техническая поддержка сотрудников (SUPPORT)";</p></li>
+		<li><p>создать задачу по <a href="https://jira.astrum.team/secure/CreateIssue.jspa?pid=10104&issuetype=10117" target="_blank">прямой ссылке</a> в Jira с выбранным типом задачи "Запрос в службу поддержки";</p></li>
+		<li><p>написать письмо с описанием проблемы на адрес <a href="mailto:tech.support@astrum.team" target="_blank">tech.support@astrum.team</a>.</p></li>
+	</ul>
+	<p>
+		Желаем всем хорошего дня!
+	</p>
+</body>

@@ -25,7 +25,7 @@ def generate_onetime_link(settings, text) -> str:
     data = {
         'secretMessage': text,
         'secretKey': '',
-        'duration': 604800,
+        'duration': 691200,
     }
     response = requests.post(
         url, data=data, headers=headers, verify=False)
